@@ -4,6 +4,11 @@ Quick Settings NG extends GNOME Shell 51 Quick Settings with media controls, pri
 
 It integrates with the existing GNOME Quick Settings panel instead of replacing it.
 
+
+<p align="center">
+  <img src="docs/images/quick-settings-ng.png" alt="Quick Settings NG running on GNOME Shell" width="391">
+</p>
+
 ## Features
 
 ### Media
