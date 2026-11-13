@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install GLib tools
+        run: sudo apt-get update && sudo apt-get install -y libglib2.0-bin
+      - name: Install dependencies
+        run: npm ci
+      - name: Validate source and build
+        run: npm run check
+      - name: Upload extension package
+        uses: actions/upload-artifact@v4
+        with:
+          name: quick-settings-ng-extension
+          path: build/*.zip

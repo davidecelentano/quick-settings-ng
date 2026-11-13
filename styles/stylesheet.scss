@@ -1,0 +1,110 @@
+/*
+ * Quick Settings NG
+ *
+ * Global styling must remain minimal. Feature-specific styles use the qsng-
+ * prefix so they cannot accidentally restyle GNOME Shell actors globally.
+ */
+
+.qsng-media-card {
+    spacing: 10px;
+    padding: 12px;
+    border-radius: 14px;
+    background-color: rgba(127, 127, 127, 0.12);
+}
+
+.qsng-media-header,
+.qsng-media-content,
+.qsng-media-controls {
+    spacing: 10px;
+}
+
+.qsng-media-heading,
+.qsng-media-title {
+    font-weight: bold;
+}
+
+.qsng-media-player-count,
+.qsng-media-artist {
+    opacity: 0.72;
+}
+
+.qsng-media-player-count {
+    font-size: 0.85em;
+}
+
+.qsng-media-artist {
+    font-size: 0.9em;
+}
+
+.qsng-media-art {
+    icon-size: 48px;
+    min-width: 48px;
+    min-height: 48px;
+}
+
+.qsng-media-track-info {
+    spacing: 2px;
+}
+
+.qsng-media-control {
+    padding: 6px;
+}
+
+.qsng-media-control-primary {
+    padding: 8px;
+}
+
+.qsng-media-progress-box {
+    spacing: 4px;
+}
+
+.qsng-media-progress {
+    min-height: 20px;
+}
+
+.qsng-media-time-row {
+    spacing: 8px;
+}
+
+.qsng-media-time {
+    font-size: 0.78em;
+    opacity: 0.68;
+}
+
+.qsng-media-player-nav {
+    spacing: 4px;
+}
+
+.qsng-media-player-nav-button {
+    padding: 3px;
+}
+
+.qsng-section-heading {
+    font-weight: bold;
+}
+
+.qsng-volume-menu-item {
+    padding-top: 4px;
+    padding-bottom: 6px;
+}
+
+.qsng-volume-menu-row {
+    spacing: 6px;
+}
+
+.qsng-volume-menu-header {
+    spacing: 8px;
+}
+
+.qsng-volume-mute {
+    padding: 4px;
+}
+
+.qsng-volume-label {
+    font-size: 0.92em;
+}
+
+.qsng-layout-compact .quick-settings-grid {
+    spacing-rows: 6px;
+    spacing-columns: 6px;
+}

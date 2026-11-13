@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema
+    id="org.gnome.shell.extensions.quick-settings-ng"
+    path="/org/gnome/shell/extensions/quick-settings-ng/">
+
+    <key name="media-enabled" type="b">
+      <default>false</default>
+      <summary>Enable media module</summary>
+    </key>
+
+    <key name="media-artwork-enabled" type="b">
+      <default>true</default>
+      <summary>Show media artwork</summary>
+    </key>
+
+    <key name="media-progress-enabled" type="b">
+      <default>true</default>
+      <summary>Show media progress and seek controls</summary>
+    </key>
+
+    <key name="media-player-navigation-enabled" type="b">
+      <default>true</default>
+      <summary>Show multi-player navigation controls</summary>
+    </key>
+
+    <key name="privacy-enabled" type="b">
+      <default>false</default>
+      <summary>Enable privacy module</summary>
+    </key>
+
+    <key name="privacy-grouped" type="b">
+      <default>true</default>
+      <summary>Group privacy controls into one Quick Settings tile</summary>
+    </key>
+
+    <key name="privacy-click-to-toggle" type="b">
+      <default>false</default>
+      <summary>Toggle all privacy controls from the grouped tile</summary>
+    </key>
+
+
+    <key name="volume-mixer-enabled" type="b">
+      <default>false</default>
+      <summary>Enable volume mixer module</summary>
+    </key>
+
+
+    <key name="layout-enabled" type="b">
+      <default>false</default>
+      <summary>Enable layout customization module</summary>
+    </key>
+
+    <key name="layout-compact" type="b">
+      <default>true</default>
+      <summary>Use compact Quick Settings spacing</summary>
+    </key>
+
+    <key name="menu-effects-enabled" type="b">
+      <default>false</default>
+      <summary>Enable menu effects module</summary>
+    </key>
+
+  </schema>
+</schemalist>

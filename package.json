@@ -1,0 +1,28 @@
+{
+  "name": "quick-settings-ng",
+  "version": "0.1.0",
+  "description": "Next-generation, modular Quick Settings customization for GNOME Shell.",
+  "private": true,
+  "type": "module",
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build:ts": "tsc",
+    "build:css": "sass --no-source-map styles/stylesheet.scss dist/stylesheet.css",
+    "build": "rm -rf dist && npm run build:ts && npm run build:css && npm run build:schema && cp metadata.json LICENSE dist/",
+    "clean": "rm -rf dist",
+    "pack": "./tools/pack.sh",
+    "build:schema": "mkdir -p dist/schemas && cp schemas/*.gschema.xml dist/schemas/ && glib-compile-schemas --strict --targetdir=dist/schemas dist/schemas",
+    "test:mpris": "./tools/test-mpris-model.sh",
+    "test:media-ui": "./tools/test-media-ui.sh",
+    "test:ui": "./tools/test-media-ui.sh",
+    "audit:source": "./tools/audit-source.sh",
+    "check": "npm run audit:source && npm run typecheck && npm run build && npm run pack"
+  },
+  "devDependencies": {
+    "@girs/gjs": "^5.6.0",
+    "@girs/gnome-shell": "^51.0.1",
+    "sass": "^1.108.2",
+    "typescript": "^7.0.2"
+  }
+}
