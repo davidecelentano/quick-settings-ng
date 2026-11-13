@@ -1,3 +1,7 @@
+import {
+    reportError,
+} from '../../core/log.js';
+
 import Gio from 'gi://Gio';
 
 import {
@@ -172,7 +176,7 @@ export class MprisDiscovery implements Disposable {
 
             this.#initializing = false;
 
-            console.error(
+            reportError(
                 '[QSNG] media: MPRIS discovery failed',
                 error,
             );
@@ -258,7 +262,7 @@ export class MprisDiscovery implements Disposable {
         try {
             listener(this.players);
         } catch (error) {
-            console.error(
+            reportError(
                 '[QSNG] media: MPRIS listener failed',
                 error,
             );

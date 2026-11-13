@@ -74,26 +74,6 @@ export class MediaFeature extends Feature {
             players.subscribe(snapshots => {
                 widget.update(snapshots);
 
-                if (snapshots.length === 0) {
-                    console.log(
-                        '[QSNG] media: 0 ready MPRIS player(s)',
-                    );
-                    return;
-                }
-
-                const summary = snapshots
-                    .map(snapshot => {
-                        const title = snapshot.title || '(untitled)';
-
-                        return `${snapshot.serviceName} [` +
-                            `${snapshot.playbackStatus}] ${title}`;
-                    })
-                    .join(' | ');
-
-                console.log(
-                    `[QSNG] media: ${snapshots.length} ready ` +
-                    `MPRIS player(s): ${summary}`,
-                );
             }),
         );
 

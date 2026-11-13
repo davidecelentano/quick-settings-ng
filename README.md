@@ -1,152 +1,241 @@
 # Quick Settings NG
 
-Quick Settings NG extends the GNOME Shell 51 Quick Settings panel with a small set of features that fit naturally into the stock interface.
+Quick Settings NG extends GNOME Shell 51 Quick Settings with media controls, privacy controls, per-application volume mixing, layout options, and focused interface refinements.
 
-It keeps GNOME's own controls in place and adds the pieces that are missing: a richer media card, privacy controls, per-application volume, compact layout options, and a few focused UI refinements.
+It integrates with the existing GNOME Quick Settings panel instead of replacing it.
 
 ## Features
 
-| Area | What Quick Settings NG adds |
-| --- | --- |
-| Media | MPRIS media card with artwork, metadata, playback controls, progress, seeking, and multi-player navigation |
-| Privacy | Location, camera, and microphone controls, available as grouped or individual Quick Settings items |
-| Application volume | Per-application volume and mute controls inside the stock GNOME volume menu |
-| Layout | Optional compact spacing for the Quick Settings panel |
-| Effects | Lightweight Quick Settings opening animation that follows GNOME's animation preference |
-| Preferences | Native libadwaita settings window |
-
 ### Media
 
-The media card is built around MPRIS and supports:
+A full MPRIS media card integrated into Quick Settings.
 
-- artwork, title, artist, and album metadata;
-- previous, play/pause, and next controls;
-- live playback progress;
-- absolute seeking;
-- multiple active MPRIS players;
-- player switching from the card;
-- exclusive playback switching when starting another player through QSNG.
+- Album artwork
+- Track title, artist, and album metadata
+- Previous, play/pause, and next controls
+- Live playback position
+- Seek support
+- Multiple MPRIS players
+- Player navigation
+- Exclusive playback switching between players
+- Automatic hide when no supported player is available
 
-The interaction model uses regular GNOME Shell controls and does not use the old stage-grab gesture path that caused stuck pointer/drag behaviour in older implementations.
+The media controls use regular GNOME Shell widgets and avoid the stage-grab gesture implementation used by older Quick Settings extensions.
 
 ### Privacy
 
-QSNG can expose quick access to:
+Quick access to GNOME privacy controls for:
 
-- Location;
-- Camera;
-- Microphone.
+- Location
+- Camera
+- Microphone
 
-Privacy controls can be shown as separate items or grouped together from Preferences.
+Privacy items can be displayed individually or as a grouped control.
 
 ### Application Volume
 
-Application Volume lives inside GNOME's existing volume control instead of adding a second master-volume panel.
+Per-application audio controls are integrated directly into GNOME's existing volume menu.
 
-When applications expose active audio streams, the stock volume menu gains an `Application Volume` section with per-application sliders and mute controls. When there is nothing to mix, the section stays out of the way.
+When applications expose active audio streams, the volume menu gains an `Application Volume` section with:
 
-### Layout and effects
+- Per-application volume sliders
+- Per-application mute controls
+- Application icons and names
 
-QSNG can tighten the spacing of the Quick Settings panel and add a subtle opening animation. Both changes are reversible, and the animation follows GNOME's global animation setting.
+No second master-volume control is added.
 
-## Scope
+When no application streams are present, the section is hidden.
 
-Quick Settings NG is deliberately focused on the Quick Settings panel.
+### Compact Layout
 
-Notifications and weather are not duplicated because GNOME already exposes them through the date and calendar menu. QSNG also avoids replacing the complete Quick Settings panel when a smaller integration can do the job.
+Optional reduced spacing for the Quick Settings panel.
+
+### Menu Effects
+
+Optional Quick Settings opening animation.
+
+GNOME's global animation preference is respected.
+
+### Preferences
+
+A native libadwaita preferences window provides runtime configuration for the extension features.
 
 ## Requirements
 
 - GNOME Shell 51
-- A GNOME session with user extensions enabled
 
-For building from source:
+Extension UUID:
 
-- Node.js and npm
-- `glib-compile-schemas`
+```text
+quick-settings-ng@davidecelentano.github.io
+```
 
-## Install
+## Installation
 
-Download the extension ZIP from the Releases page, then install it with:
+### GNOME Extensions
+
+Quick Settings NG is distributed through the GNOME Extensions ecosystem.
+
+Use GNOME Extensions or a compatible extension manager to install and manage the extension for supported GNOME Shell versions.
+
+### GitHub Releases
+
+Release packages are also available from:
+
+https://github.com/davidecelentano/quick-settings-ng/releases
+
+Install a downloaded release with:
 
 ```bash
 gnome-extensions install --force quick-settings-ng@davidecelentano.github.io.shell-extension.zip
 gnome-extensions enable quick-settings-ng@davidecelentano.github.io
 ```
 
-Open Preferences with:
+Open the preferences window with:
 
 ```bash
 gnome-extensions prefs quick-settings-ng@davidecelentano.github.io
 ```
 
-When replacing an already loaded development build, a logout/login may be required for GNOME Shell to discard previously imported extension modules.
+When replacing an already loaded build, GNOME Shell may require a logout/login before loading all modules from the new version.
 
-## Build from source
+## Build
+
+Clone the repository:
 
 ```bash
 git clone https://github.com/davidecelentano/quick-settings-ng.git
 cd quick-settings-ng
+```
+
+Install development dependencies:
+
+```bash
 npm ci
+```
+
+Run the complete validation and packaging pipeline:
+
+```bash
 npm run check
 ```
 
-The packaged extension is written to:
+The resulting extension package is written to:
 
 ```text
 build/quick-settings-ng@davidecelentano.github.io.shell-extension.zip
 ```
 
-Useful development commands:
+## Development Commands
+
+TypeScript validation:
 
 ```bash
 npm run typecheck
+```
+
+MPRIS model and player tests:
+
+```bash
 npm run test:mpris
+```
+
+GNOME Shell UI test:
+
+```bash
 npm run test:ui
+```
+
+Source integration audit:
+
+```bash
 npm run audit:source
 ```
 
-## Project layout
+Build only:
+
+```bash
+npm run build
+```
+
+Package:
+
+```bash
+npm run pack
+```
+
+## Architecture
+
+Quick Settings NG is split into independent features with explicit lifecycle ownership.
 
 ```text
 src/
-  compat/          Narrow GNOME Shell integration bridges
-  core/            Feature lifecycle, settings, ordering, and host integration
-  features/
-    layout/
-    media/
-    menu-effects/
-    privacy/
-    volume-mixer/
-  extension.ts     Extension entry point
-  prefs.ts         libadwaita Preferences
+├── compat/
+│   └── GNOME Shell integration bridges
+├── core/
+│   ├── feature lifecycle
+│   ├── settings
+│   ├── Quick Settings host integration
+│   └── ordering
+├── features/
+│   ├── layout/
+│   ├── media/
+│   ├── menu-effects/
+│   ├── privacy/
+│   └── volume-mixer/
+├── extension.ts
+└── prefs.ts
 
-schemas/           GSettings schema
-styles/            Shell stylesheet
-tools/             Build, audit, and test helpers
-docs/              Architecture, development, audit, and upstream notes
+schemas/
+styles/
+tools/
+docs/
 ```
 
-## Development notes
+The extension keeps GNOME-specific integration points narrow and separates feature lifetime from Shell integration.
 
-The extension is split into independent features with explicit enable/disable lifecycles. Shell-specific integration is kept narrow so individual features can be changed without turning the extension into a replacement Quick Settings implementation.
+The volume mixer uses a dedicated GNOME 51 integration bridge to attach application streams to the stock output-volume menu.
 
-More detail is available in:
+## Package Contents
+
+A release package contains only runtime files required by GNOME Shell:
+
+```text
+extension.js
+metadata.json
+prefs.js
+stylesheet.css
+LICENSE
+UPSTREAM.md
+
+compat/
+core/
+features/
+schemas/
+```
+
+The GSettings XML schema is included in the package. Precompiled `gschemas.compiled` files are not distributed.
+
+## Documentation
+
+Additional technical documentation is available in:
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Development](docs/DEVELOPMENT.md)
 - [Source audit](docs/AUDIT.md)
 - [Upstream provenance](docs/UPSTREAM.md)
 
-## Upstream projects
+## Upstream
 
-Quick Settings NG builds on ideas and selected implementation work from:
+Quick Settings NG incorporates ideas and selected implementation work derived from:
 
 - [Quick Settings Tweaks](https://github.com/jstockdale/quick-settings-tweaks)
 - [Privacy Menu Extension](https://github.com/stuarthayhurst/privacy-menu-extension)
 
-See [docs/UPSTREAM.md](docs/UPSTREAM.md) for provenance and porting notes.
+Ported and adapted code is documented in [docs/UPSTREAM.md](docs/UPSTREAM.md).
 
 ## License
 
-GPL-3.0-only. See [LICENSE](LICENSE).
+Quick Settings NG is licensed under the GNU General Public License v3.0 only.
+
+See [LICENSE](LICENSE).

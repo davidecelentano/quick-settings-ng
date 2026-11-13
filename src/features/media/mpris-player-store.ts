@@ -1,4 +1,9 @@
 import {
+    reportError,
+    reportWarning,
+} from '../../core/log.js';
+
+import {
     DisposableStore,
     type Disposable,
 } from '../../core/disposable.js';
@@ -120,7 +125,7 @@ export class MprisPlayerStore implements Disposable {
                 continue;
 
             if (!snapshot.canControl || !snapshot.canPause) {
-                console.warn(
+                reportWarning(
                     `[QSNG] media: cannot pause active player ${otherServiceName}`,
                 );
                 continue;
@@ -217,7 +222,7 @@ export class MprisPlayerStore implements Disposable {
             this.#entries.delete(serviceName);
             lifetime.dispose();
 
-            console.error(
+            reportError(
                 `[QSNG] media: failed starting MPRIS player ${serviceName}`,
                 error,
             );
@@ -233,7 +238,7 @@ export class MprisPlayerStore implements Disposable {
         try {
             listener(this.players);
         } catch (error) {
-            console.error(
+            reportError(
                 '[QSNG] media: player-store listener failed',
                 error,
             );

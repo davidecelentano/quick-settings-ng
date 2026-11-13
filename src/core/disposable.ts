@@ -1,3 +1,7 @@
+import {
+    reportError,
+} from './log.js';
+
 export interface Disposable {
     dispose(): void;
 }
@@ -54,7 +58,7 @@ export class DisposableStore implements Disposable {
         try {
             disposer();
         } catch (error) {
-            console.error('[QSNG] cleanup failed', error);
+            reportError('[QSNG] cleanup failed', error);
         }
     }
 }

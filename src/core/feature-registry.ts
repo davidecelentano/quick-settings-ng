@@ -1,3 +1,7 @@
+import {
+    reportError,
+} from './log.js';
+
 import Gio from 'gi://Gio';
 
 import {
@@ -91,7 +95,7 @@ export class FeatureRegistry implements Disposable {
             else
                 this.#manager.disable(featureId);
         } catch (error) {
-            console.error(
+            reportError(
                 `[QSNG] failed applying feature setting: ${featureId}`,
                 error,
             );

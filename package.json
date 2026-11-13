@@ -1,6 +1,6 @@
 {
   "name": "quick-settings-ng",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Next-generation, modular Quick Settings customization for GNOME Shell.",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "build": "rm -rf dist && npm run build:ts && npm run build:css && npm run build:schema && cp metadata.json LICENSE docs/UPSTREAM.md dist/",
     "clean": "rm -rf dist",
     "pack": "./tools/pack.sh",
-    "build:schema": "mkdir -p dist/schemas && cp schemas/*.gschema.xml dist/schemas/ && glib-compile-schemas --strict --targetdir=dist/schemas dist/schemas",
+    "build:schema": "mkdir -p dist/schemas && cp schemas/*.gschema.xml dist/schemas/ && glib-compile-schemas --strict --dry-run dist/schemas",
     "test:mpris": "./tools/test-mpris-model.sh",
     "test:media-ui": "./tools/test-media-ui.sh",
     "test:ui": "./tools/test-media-ui.sh",

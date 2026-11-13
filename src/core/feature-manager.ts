@@ -1,4 +1,8 @@
 import {
+    reportError,
+} from './log.js';
+
+import {
     type Disposable,
 } from './disposable.js';
 
@@ -52,11 +56,9 @@ export class FeatureManager implements Disposable {
         if (feature.enabled)
             return;
 
-        console.log(`[QSNG] enabling feature: ${id}`);
 
         feature.enable();
 
-        console.log(`[QSNG] enabled feature: ${id}`);
     }
 
     disable(id: string): void {
@@ -65,12 +67,11 @@ export class FeatureManager implements Disposable {
         if (!feature.enabled)
             return;
 
-        console.log(`[QSNG] disabling feature: ${id}`);
 
         try {
             feature.disable();
         } catch (error) {
-            console.error(`[QSNG] failed disabling feature: ${id}`, error);
+            reportError(`[QSNG] failed disabling feature: ${id}`, error);
         }
     }
 
@@ -84,21 +85,19 @@ export class FeatureManager implements Disposable {
                 if (feature.enabled)
                     continue;
 
-                console.log(`[QSNG] enabling feature: ${feature.id}`);
 
                 feature.enable();
                 enabledNow.push(feature);
 
-                console.log(`[QSNG] enabled feature: ${feature.id}`);
             }
         } catch (error) {
-            console.error('[QSNG] feature startup failed, rolling back', error);
+            reportError('[QSNG] feature startup failed, rolling back', error);
 
             for (const feature of enabledNow.reverse()) {
                 try {
                     feature.disable();
                 } catch (cleanupError) {
-                    console.error(
+                    reportError(
                         `[QSNG] rollback failed for feature: ${feature.id}`,
                         cleanupError,
                     );
@@ -116,12 +115,11 @@ export class FeatureManager implements Disposable {
             if (!feature.enabled)
                 continue;
 
-            console.log(`[QSNG] disabling feature: ${feature.id}`);
 
             try {
                 feature.disable();
             } catch (error) {
-                console.error(
+                reportError(
                     `[QSNG] failed disabling feature: ${feature.id}`,
                     error,
                 );
@@ -141,7 +139,7 @@ export class FeatureManager implements Disposable {
             try {
                 feature.dispose();
             } catch (error) {
-                console.error(
+                reportError(
                     `[QSNG] failed disposing feature: ${feature.id}`,
                     error,
                 );

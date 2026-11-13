@@ -1,3 +1,7 @@
+import {
+    reportError,
+} from '../../core/log.js';
+
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
@@ -402,7 +406,7 @@ export class MprisPlayer implements Disposable {
 
             this.#initializing = false;
 
-            console.error(
+            reportError(
                 `[QSNG] media: failed loading MPRIS player ${this.serviceName}`,
                 error,
             );
@@ -504,7 +508,7 @@ export class MprisPlayer implements Disposable {
                 return;
             }
 
-            console.error(
+            reportError(
                 `[QSNG] media: failed refreshing MPRIS player ${this.serviceName}`,
                 error,
             );
@@ -548,7 +552,7 @@ export class MprisPlayer implements Disposable {
                 return;
             }
 
-            console.error(
+            reportError(
                 `[QSNG] media: failed refreshing position for ${this.serviceName}`,
                 error,
             );
@@ -774,7 +778,7 @@ export class MprisPlayer implements Disposable {
             return;
         }
 
-        console.error(
+        reportError(
             `[QSNG] media: MPRIS ${method} failed for ${this.serviceName}`,
             error,
         );
@@ -791,7 +795,7 @@ export class MprisPlayer implements Disposable {
         try {
             listener(this.snapshot);
         } catch (error) {
-            console.error(
+            reportError(
                 `[QSNG] media: player listener failed for ${this.serviceName}`,
                 error,
             );

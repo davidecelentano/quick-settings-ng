@@ -1,3 +1,7 @@
+import {
+    reportError,
+} from '../../core/log.js';
+
 import Clutter from 'gi://Clutter';
 import GLib from 'gi://GLib';
 import Gvc from 'gi://Gvc';
@@ -25,16 +29,16 @@ const ATTACH_RETRY_LIMIT = 50;
 const APPLICATION_SECTION_POSITION = 2;
 
 class AppVolumeMenuRow {
-    readonly item: PopupMenu.PopupBaseMenuItem;
-
     #control: Gvc.MixerControl;
     #stream: Gvc.MixerStream;
-    #slider: Slider.Slider;
-    #sliderSignalId: number;
+    #item: PopupMenu.PopupBaseMenuItem | null = null;
+    #slider: Slider.Slider | null = null;
+    #sliderSignalId = 0;
     #streamSignalIds: number[] = [];
-    #icon: St.Icon;
-    #label: St.Label;
-    #muteButton: St.Button;
+    #icon: St.Icon | null = null;
+    #label: St.Label | null = null;
+    #muteButton: St.Button | null = null;
+    #muteButtonSignalId = 0;
     #destroyed = false;
 
     constructor(
@@ -44,7 +48,7 @@ class AppVolumeMenuRow {
         this.#control = control;
         this.#stream = stream;
 
-        this.item = new PopupMenu.PopupBaseMenuItem({
+        this.#item = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
             can_focus: false,
             style_class: 'qsng-volume-menu-item',
@@ -55,7 +59,7 @@ class AppVolumeMenuRow {
             x_expand: true,
             style_class: 'qsng-volume-menu-row',
         });
-        this.item.add_child(content);
+        this.#item.add_child(content);
 
         const header = new St.BoxLayout({
             x_expand: true,
@@ -90,9 +94,12 @@ class AppVolumeMenuRow {
             }),
             style_class: 'icon-button flat qsng-volume-mute',
         });
-        this.#muteButton.connect('clicked', () => {
-            this.#stream.change_is_muted(!this.#stream.is_muted);
-        });
+        this.#muteButtonSignalId = this.#muteButton.connect(
+            'clicked',
+            () => {
+                this.#stream.change_is_muted(!this.#stream.is_muted);
+            },
+        );
         header.add_child(this.#muteButton);
 
         this.#slider = new Slider.Slider(0);
@@ -112,8 +119,20 @@ class AppVolumeMenuRow {
         this.#sync();
     }
 
+    get item(): PopupMenu.PopupBaseMenuItem {
+        if (this.#item === null)
+            throw new Error('Volume mixer row has been destroyed');
+
+        return this.#item;
+    }
+
     refresh(): void {
-        if (this.#destroyed)
+        if (
+            this.#destroyed ||
+            this.#icon === null ||
+            this.#label === null ||
+            this.#slider === null
+        )
             return;
 
         this.#icon.gicon = this.#stream.get_gicon();
@@ -127,17 +146,39 @@ class AppVolumeMenuRow {
             return;
 
         this.#destroyed = true;
-        this.#slider.disconnect(this.#sliderSignalId);
+
+        if (this.#slider !== null && this.#sliderSignalId !== 0) {
+            this.#slider.disconnect(this.#sliderSignalId);
+            this.#sliderSignalId = 0;
+        }
+
+        if (this.#muteButton !== null && this.#muteButtonSignalId !== 0) {
+            this.#muteButton.disconnect(this.#muteButtonSignalId);
+            this.#muteButtonSignalId = 0;
+        }
 
         for (const signalId of this.#streamSignalIds)
             this.#stream.disconnect(signalId);
         this.#streamSignalIds = [];
 
-        this.item.destroy();
+        this.#slider?.destroy();
+        this.#slider = null;
+
+        this.#muteButton?.destroy();
+        this.#muteButton = null;
+
+        this.#label?.destroy();
+        this.#label = null;
+
+        this.#icon?.destroy();
+        this.#icon = null;
+
+        this.#item?.destroy();
+        this.#item = null;
     }
 
     #onSliderChanged(): void {
-        if (this.#destroyed)
+        if (this.#destroyed || this.#slider === null)
             return;
 
         const volume = Math.round(
@@ -157,7 +198,11 @@ class AppVolumeMenuRow {
     }
 
     #sync(): void {
-        if (this.#destroyed)
+        if (
+            this.#destroyed ||
+            this.#slider === null ||
+            this.#muteButton === null
+        )
             return;
 
         const value = this.#stream.is_muted
@@ -178,7 +223,7 @@ class AppVolumeMenuRow {
 class VolumeMixerMenu {
     #outputSlider: QuickSettings.QuickSlider;
     #control: Gvc.MixerControl;
-    #expander: PopupMenu.PopupSubMenuMenuItem;
+    #expander: PopupMenu.PopupSubMenuMenuItem | null = null;
     #rows = new Map<number, AppVolumeMenuRow>();
     #controlSignalIds: number[] = [];
     #destroyed = false;
@@ -242,13 +287,18 @@ class VolumeMixerMenu {
             row.destroy();
         this.#rows.clear();
 
-        this.#expander.destroy();
+        this.#expander?.destroy();
+        this.#expander = null;
 
         this.#outputSlider.menuEnabled = this.#stockNeedsMenu();
     }
 
     #addStream(id: number): void {
-        if (this.#destroyed || this.#rows.has(id))
+        if (
+            this.#destroyed ||
+            this.#expander === null ||
+            this.#rows.has(id)
+        )
             return;
 
         const stream = this.#control.lookup_stream_id(id);
@@ -287,6 +337,9 @@ class VolumeMixerMenu {
     }
 
     #syncVisibility(): void {
+        if (this.#expander === null)
+            return;
+
         const hasApplications = this.#rows.size > 0;
 
         this.#expander.visible = hasApplications;
@@ -353,7 +406,7 @@ export class VolumeMixerFeature extends Feature {
                 }
 
                 if (attempts >= ATTACH_RETRY_LIMIT) {
-                    console.error(
+                    reportError(
                         '[QSNG] volume mixer: stock output volume control unavailable',
                     );
                     retryId = 0;

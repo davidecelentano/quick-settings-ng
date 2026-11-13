@@ -1,3 +1,7 @@
+import {
+    reportError,
+} from '../../core/log.js';
+
 import Clutter from 'gi://Clutter';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
@@ -628,7 +632,7 @@ export class MediaWidget {
             this.#artTexture = texture;
             this.#artContainer.add_child(texture);
         } catch (error) {
-            console.error(
+            reportError(
                 `[QSNG] media: failed to load artwork ${nextUrl}`,
                 error,
             );

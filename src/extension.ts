@@ -1,4 +1,8 @@
 import {
+    reportError,
+} from './core/log.js';
+
+import {
     Extension,
 } from 'resource:///org/gnome/shell/extensions/extension.js';
 
@@ -81,12 +85,11 @@ export default class QuickSettingsNGExtension extends Extension {
                 FEATURE_SETTINGS['menu-effects'],
             );
 
-            console.log(`[QSNG] enabled: ${this.metadata.name}`);
         } catch (error) {
             this.#lifetime = null;
             lifetime.dispose();
 
-            console.error(
+            reportError(
                 '[QSNG] extension startup failed',
                 error,
             );
@@ -101,6 +104,5 @@ export default class QuickSettingsNGExtension extends Extension {
 
         lifetime?.dispose();
 
-        console.log('[QSNG] disabled');
     }
 }
