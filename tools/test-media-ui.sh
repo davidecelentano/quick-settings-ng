@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-UUID="quick-settings-ng@davidecelentano.github.com"
+UUID="quick-settings-ng@davidecelentano.github.io"
 ZIP="$ROOT/build/$UUID.shell-extension.zip"
 
 cd "$ROOT"
@@ -14,7 +14,7 @@ gnome-extensions install --force "$ZIP"
 dbus-run-session -- bash -c '
 set -euo pipefail
 
-UUID="quick-settings-ng@davidecelentano.github.com"
+UUID="quick-settings-ng@davidecelentano.github.io"
 SCHEMA="org.gnome.shell.extensions.quick-settings-ng"
 EXTDIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
 SCHEMA_DIR="$EXTDIR/schemas"

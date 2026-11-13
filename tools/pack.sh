@@ -5,7 +5,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST="$ROOT/dist"
 BUILD="$ROOT/build"
-UUID="quick-settings-ng@davidecelentano.github.com"
+UUID="quick-settings-ng@davidecelentano.github.io"
 ZIP="$BUILD/$UUID.shell-extension.zip"
 
 cd "$ROOT"

@@ -70,14 +70,14 @@ For building from source:
 Download the extension ZIP from the Releases page, then install it with:
 
 ```bash
-gnome-extensions install --force quick-settings-ng@davidecelentano.github.com.shell-extension.zip
-gnome-extensions enable quick-settings-ng@davidecelentano.github.com
+gnome-extensions install --force quick-settings-ng@davidecelentano.github.io.shell-extension.zip
+gnome-extensions enable quick-settings-ng@davidecelentano.github.io
 ```
 
 Open Preferences with:
 
 ```bash
-gnome-extensions prefs quick-settings-ng@davidecelentano.github.com
+gnome-extensions prefs quick-settings-ng@davidecelentano.github.io
 ```
 
 When replacing an already loaded development build, a logout/login may be required for GNOME Shell to discard previously imported extension modules.
@@ -94,7 +94,7 @@ npm run check
 The packaged extension is written to:
 
 ```text
-build/quick-settings-ng@davidecelentano.github.com.shell-extension.zip
+build/quick-settings-ng@davidecelentano.github.io.shell-extension.zip
 ```
 
 Useful development commands:

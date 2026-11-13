@@ -1,11 +1,11 @@
 {
   "name": "Quick Settings NG",
-  "description": "Next-generation, modular Quick Settings customization for GNOME Shell.",
-  "uuid": "quick-settings-ng@davidecelentano.github.com",
+  "description": "Adds MPRIS media controls, privacy toggles, per-application volume controls, compact layout options, and menu effects to GNOME Shell Quick Settings.",
+  "uuid": "quick-settings-ng@davidecelentano.github.io",
   "shell-version": [
     "51"
   ],
-  "version": 1,
-  "version-name": "0.1.0",
-  "settings-schema": "org.gnome.shell.extensions.quick-settings-ng"
+  "version-name": "0.1.1",
+  "settings-schema": "org.gnome.shell.extensions.quick-settings-ng",
+  "url": "https://github.com/davidecelentano/quick-settings-ng"
 }
