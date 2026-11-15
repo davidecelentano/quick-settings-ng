@@ -299,9 +299,14 @@ export class MediaWidget {
         if (this.#destroyed)
             return;
 
-        this.#snapshots = snapshots;
+        // MPRIS players may remain registered after playback has stopped.
+        // Keep paused players (resumable), but never show stopped players.
+        const activeSnapshots = snapshots.filter(snapshot =>
+            snapshot.playbackStatus !== 'Stopped');
 
-        if (snapshots.length === 0) {
+        this.#snapshots = activeSnapshots;
+
+        if (activeSnapshots.length === 0) {
             this.#selectedServiceName = null;
             this.#manualSelection = false;
             this.#stopProgressTick();
@@ -312,10 +317,10 @@ export class MediaWidget {
 
         const current = this.#selectedServiceName === null
             ? null
-            : snapshots.find(snapshot =>
+            : activeSnapshots.find(snapshot =>
                 snapshot.serviceName === this.#selectedServiceName) ?? null;
 
-        const playing = snapshots.find(snapshot =>
+        const playing = activeSnapshots.find(snapshot =>
             snapshot.playbackStatus === 'Playing') ?? null;
 
         if (current === null && this.#selectedServiceName !== null)
@@ -329,7 +334,7 @@ export class MediaWidget {
             ? current
             : current?.playbackStatus === 'Playing'
                 ? current
-                : playing ?? current ?? snapshots[0];
+                : playing ?? current ?? activeSnapshots[0];
 
         if (selected === undefined) {
             this.#selectedServiceName = null;
@@ -344,7 +349,7 @@ export class MediaWidget {
         }
 
         this.#selectedServiceName = selected.serviceName;
-        this.#render(selected, snapshots.length);
+        this.#render(selected, activeSnapshots.length);
         this.actor.visible = true;
     }
 

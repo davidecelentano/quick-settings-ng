@@ -1,6 +1,6 @@
 {
   "name": "quick-settings-ng",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Next-generation, modular Quick Settings customization for GNOME Shell.",
   "private": true,
   "type": "module",
